@@ -1,0 +1,560 @@
+import React, { useState } from 'react';
+import { BookOpen, CheckCircle, HelpCircle, XCircle, ArrowRight, History, MapPin, User, ChevronDown, ChevronUp, Anchor, Ship, TrendingUp, MessageCircle, Sparkles, Trophy } from 'lucide-react';
+
+const HistoryLearningApp = () => {
+  const [activeTab, setActiveTab] = useState('memo');
+  const [q1Selected, setQ1Selected] = useState(null);
+  const [q2Selected, setQ2Selected] = useState(null);
+  const [showQ1Explanation, setShowQ1Explanation] = useState(false);
+  const [showQ2Explanation, setShowQ2Explanation] = useState(false);
+  
+  // 面白要素：清盛のセリフ
+  const [kiyomoriQuote, setKiyomoriQuote] = useState("わしが平清盛じゃ。大輪田泊（神戸）について何でも聞いてくれ！");
+  
+  const kiyomoriQuotes = [
+    "宋銭は便利じゃろう？重い米を運ぶより、チャリンと銭で払うのが「ナウい」んじゃ！",
+    "大輪田泊（神戸）は、風も波も防げる最高の立地なんじゃ。わしの目の付け所、天才的じゃろ？😤",
+    "実はな、厳島神社も好きじゃが、経済の中心はこの神戸じゃと思っておる。",
+    "「経が島」という人工島を作ったんじゃが、工事が難航してな...石に経文を書いて埋めたんじゃ。涙ぐましい努力じゃろ？",
+    "日宋貿易で輸入した「宋銭」、最初はみんな「こんな金属の円盤、何に使うん？」って顔しとったわ。",
+    "わしの死後、平家は滅んでしまったが、わしが作った港と銭の文化は残った...これぞ真の勝ち組じゃろ！✨",
+    "お主、歴史の勉強熱心じゃな。もし平安時代におったら、わしの側近にしてやったのに。",
+    "京都から神戸まで遷都（福原京）しようとしたんじゃが、みんなに反対されてしもうた...早すぎた天才じゃったか..."
+  ];
+
+  const handleKiyomoriTalk = () => {
+    const random = kiyomoriQuotes[Math.floor(Math.random() * kiyomoriQuotes.length)];
+    setKiyomoriQuote(random);
+  };
+
+  // コンテンツデータ
+  const memoContent = [
+    "律令国家による貨幣鋳造は、10世紀の乾元大宝が最後となった。",
+    "一元的な国家権力が存在しなかった中世の日本において、幕府や朝廷が貨幣を鋳造することはなかったが、生産力の拡大にともなって貨幣経済は飛躍的に発展した。",
+    "12世紀後半、平氏政権によって摂津の [ ア ] が修築されるなど、日宋貿易の振興が図られると、大量の宋銭が輸入された。",
+    "京都の公家の日記を抜粋・編集した編年体の歴史書『百錬抄』には、1179年の記事に「近日、天下の上下、病悩す。これを銭の病と号す」と記されていて、貨幣の広まりを知ることができる。",
+    "治承・寿永の乱の時期には、畿内とその周辺で貨幣経済が浸透していたが、他方、東国では物々交換や自給自足、あるいは布を媒介とした交換経済の段階だった。",
+    "鎌倉時代後期には東国にも貨幣経済は浸透するようになり、産業や経済にも大きな影響を及ぼすようになった。",
+    "13世紀末には、貨幣経済の浸透や分割相続の繰り返しによる所領の細分化などを背景とした御家人の窮乏に対処するため、執権 [ イ ] のもとで永仁の徳政令が出された。"
+  ];
+
+  const handleQ1Select = (option) => {
+    setQ1Selected(option);
+    setShowQ1Explanation(true);
+  };
+
+  const handleQ2Select = (option) => {
+    setQ2Selected(option);
+    setShowQ2Explanation(true);
+  };
+
+  return (
+    <div className="min-h-screen bg-stone-100 text-stone-800 font-sans p-4 md:p-8">
+      <div className="max-w-4xl mx-auto">
+        
+        {/* ヘッダー */}
+        <header className="mb-8 text-center">
+          <h1 className="text-3xl md:text-4xl font-bold text-stone-900 mb-2">日本史探究：中世の貨幣と歴史</h1>
+          <p className="text-stone-600 flex justify-center items-center">
+            <Sparkles className="w-4 h-4 text-yellow-500 mr-2" />
+            楽しく学ぶ第4問 解説モジュール
+            <Sparkles className="w-4 h-4 text-yellow-500 ml-2" />
+          </p>
+        </header>
+
+        {/* ナビゲーション */}
+        <div className="flex flex-wrap justify-center gap-2 mb-6">
+          <button
+            onClick={() => setActiveTab('memo')}
+            className={`px-4 py-2 rounded-full font-medium transition-all transform hover:scale-105 ${activeTab === 'memo' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-stone-600 hover:bg-stone-200'}`}
+          >
+            <BookOpen className="inline w-4 h-4 mr-2" />
+            資料を読む
+          </button>
+          <button
+            onClick={() => setActiveTab('q1')}
+            className={`px-4 py-2 rounded-full font-medium transition-all transform hover:scale-105 ${activeTab === 'q1' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-stone-600 hover:bg-stone-200'}`}
+          >
+            <HelpCircle className="inline w-4 h-4 mr-2" />
+            問1：空欄補充
+          </button>
+          <button
+            onClick={() => setActiveTab('q2')}
+            className={`px-4 py-2 rounded-full font-medium transition-all transform hover:scale-105 ${activeTab === 'q2' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-stone-600 hover:bg-stone-200'}`}
+          >
+            <History className="inline w-4 h-4 mr-2" />
+            問2：年代並び替え
+          </button>
+          <button
+            onClick={() => setActiveTab('trade')}
+            className={`px-4 py-2 rounded-full font-medium transition-all transform hover:scale-105 ${activeTab === 'trade' ? 'bg-amber-600 text-white shadow-md' : 'bg-white text-stone-600 hover:bg-stone-200'}`}
+          >
+            <Ship className="inline w-4 h-4 mr-2" />
+            神戸と貿易の歴史
+          </button>
+        </div>
+
+        {/* メインコンテンツエリア */}
+        <main className="bg-white rounded-xl shadow-lg p-6 md:p-8 min-h-[500px] border-b-4 border-indigo-200">
+          
+          {/* --- 資料（発表メモ）タブ --- */}
+          {activeTab === 'memo' && (
+            <div className="animate-fade-in">
+              <h2 className="text-2xl font-bold mb-4 flex items-center border-b pb-2 border-stone-200">
+                <BookOpen className="w-6 h-6 mr-2 text-indigo-600" />
+                タケルさんの発表メモ
+              </h2>
+              <div className="bg-amber-50 border-l-4 border-amber-400 p-6 rounded-r-lg space-y-4 text-lg leading-relaxed font-serif relative overflow-hidden">
+                {/* 背景装飾 */}
+                <div className="absolute top-0 right-0 opacity-10 transform translate-x-1/4 -translate-y-1/4">
+                    <History className="w-64 h-64 text-amber-900" />
+                </div>
+                
+                {memoContent.map((paragraph, idx) => (
+                  <p key={idx} className="mb-2 relative z-10">
+                    {paragraph.split(/(\[ [アイ] \])/).map((part, i) => {
+                      if (part === '[ ア ]') return <span key={i} className="font-bold text-red-600 bg-red-100 px-1 rounded mx-1 shadow-sm transform hover:scale-110 inline-block transition-transform cursor-default" title="ヒント：神戸の港！">[ ア ]</span>;
+                      if (part === '[ イ ]') return <span key={i} className="font-bold text-blue-600 bg-blue-100 px-1 rounded mx-1 shadow-sm transform hover:scale-110 inline-block transition-transform cursor-default" title="ヒント：鎌倉幕府の9代執権！">[ イ ]</span>;
+                      return part;
+                    })}
+                  </p>
+                ))}
+              </div>
+              <div className="mt-6 p-4 bg-indigo-50 rounded-lg">
+                <h3 className="font-bold text-indigo-800 mb-2 flex items-center">
+                  <span className="bg-indigo-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">!</span>
+                  ここがテストに出るポイント
+                </h3>
+                <ul className="list-disc list-inside text-stone-700 space-y-1 ml-2">
+                  <li>テーマ：平安時代〜鎌倉時代の貨幣の歴史</li>
+                  <li>キーワード：<span className="font-bold border-b-2 border-yellow-400">平氏政権</span>、<span className="font-bold border-b-2 border-yellow-400">日宋貿易</span>、<span className="font-bold border-b-2 border-yellow-400">宋銭</span></li>
+                  <li>キーワード：<span className="font-bold border-b-2 border-blue-300">13世紀末</span>、<span className="font-bold border-b-2 border-blue-300">御家人の窮乏</span>、<span className="font-bold border-b-2 border-blue-300">徳政令</span></li>
+                </ul>
+              </div>
+              <div className="mt-8 flex justify-end">
+                <button onClick={() => setActiveTab('q1')} className="flex items-center bg-indigo-100 text-indigo-700 px-6 py-3 rounded-full hover:bg-indigo-200 font-bold transition-all transform hover:-translate-y-1">
+                  いざ、問題へ挑戦！ <ArrowRight className="ml-2 w-5 h-5" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* --- 問1 タブ --- */}
+          {activeTab === 'q1' && (
+            <div className="animate-fade-in">
+              <h2 className="text-2xl font-bold mb-6 flex items-center">
+                <HelpCircle className="w-6 h-6 mr-2 text-indigo-600" />
+                問1：空欄補充
+              </h2>
+              
+              <div className="mb-6 p-6 bg-gray-50 rounded-xl border-2 border-gray-100 shadow-inner">
+                <p className="font-medium text-lg mb-4 text-center">空欄 [ ア ] ・ [ イ ] に入る語句の組合せはどれ？</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {[
+                    { id: 1, a: "大輪田泊", i: "北条泰時" },
+                    { id: 2, a: "大輪田泊", i: "北条貞時" },
+                    { id: 3, a: "十三湊", i: "北条泰時" },
+                    { id: 4, a: "十三湊", i: "北条貞時" }
+                  ].map((option) => (
+                    <button
+                      key={option.id}
+                      onClick={() => handleQ1Select(option.id)}
+                      className={`p-4 rounded-xl border-2 text-left transition-all relative overflow-hidden ${
+                        q1Selected === option.id 
+                          ? option.id === 2 
+                            ? 'border-green-500 bg-green-50 shadow-md transform scale-102' 
+                            : 'border-red-500 bg-red-50 shadow-md'
+                          : 'border-gray-200 hover:border-indigo-300 hover:bg-white hover:shadow-md'
+                      }`}
+                    >
+                      <div className="font-bold text-gray-500 mb-1 text-xs">選択肢 {option.id}</div>
+                      <div className="flex items-center space-x-2 text-lg">
+                        <span className="font-bold text-stone-800">ア：{option.a}</span>
+                        <span className="text-gray-300">/</span>
+                        <span className="font-bold text-stone-800">イ：{option.i}</span>
+                      </div>
+                      {/* 選択時のアイコン */}
+                       {q1Selected === option.id && (
+                          <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                              {option.id === 2 ? <CheckCircle className="w-8 h-8 text-green-500" /> : <XCircle className="w-8 h-8 text-red-500" />}
+                          </div>
+                       )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {showQ1Explanation && (
+                <div className="mt-6 space-y-6 animate-fade-in-up">
+                  {q1Selected === 2 ? (
+                    <div className="p-6 bg-green-100 text-green-800 rounded-xl border-2 border-green-300 flex flex-col items-center animate-pulse">
+                      <Trophy className="w-12 h-12 text-yellow-500 mb-2 drop-shadow-sm" />
+                      <span className="font-bold text-2xl">大正解！お見事じゃ！🎉</span>
+                      <span className="text-sm mt-1 font-medium">歴史博士への第一歩を踏み出しましたね。</span>
+                    </div>
+                  ) : (
+                    <div className="p-4 bg-red-100 text-red-800 rounded-lg flex items-center border border-red-200">
+                      <span className="text-3xl mr-3">😢</span>
+                      <div>
+                        <span className="font-bold text-lg block">惜しい！不正解です...</span>
+                        <span className="text-sm">でも大丈夫、ここから学びましょう！</span>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* 解説：空欄ア */}
+                    <div className="bg-white border border-stone-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                      <h3 className="text-lg font-bold text-red-600 mb-3 flex items-center">
+                        <MapPin className="w-5 h-5 mr-2" />
+                        [ ア ]：平氏政権と貿易港
+                      </h3>
+                      <p className="mb-3 text-stone-700 font-medium">
+                        答えは「大輪田泊（現在の神戸）」！
+                      </p>
+                      <div className="text-sm text-stone-600 space-y-2">
+                        <p className="bg-red-50 p-2 rounded">
+                          平清盛は<span className="font-bold">「日宋貿易やりたい！→船が入れる深い港が必要だ！→大輪田泊を改造しよう！」</span>と考えました。
+                        </p>
+                        <p className="text-xs text-stone-400">※十三湊は青森県の港です。もっと北の方ですね。</p>
+                      </div>
+                    </div>
+
+                    {/* 解説：空欄イ */}
+                    <div className="bg-white border border-stone-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                      <h3 className="text-lg font-bold text-blue-600 mb-3 flex items-center">
+                        <User className="w-5 h-5 mr-2" />
+                        [ イ ]：徳政令を出した執権
+                      </h3>
+                      <p className="mb-3 text-stone-700 font-medium">
+                        答えは「北条貞時」！
+                      </p>
+                      <div className="text-sm text-stone-600 space-y-2">
+                         <div className="flex items-center p-2 bg-blue-50 rounded">
+                            <span className="font-bold text-blue-700 mr-2">貞時</span>
+                            <span>= <span className="font-bold">永仁の徳政令</span> (1297年)</span>
+                         </div>
+                         <div className="flex items-center p-2 bg-gray-50 rounded opacity-70">
+                            <span className="font-bold text-stone-600 mr-2">時宗</span>
+                            <span>= <span className="font-bold">元寇</span> (モンゴル襲来)</span>
+                         </div>
+                         <p className="text-xs mt-2">「<span className="font-bold">さ</span>だとき」は「借金チャラ（<span className="font-bold">さ</span>しひきゼロ）」と覚えよう！（※語呂合わせです）</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+               {showQ1Explanation && (
+                <div className="mt-8 flex justify-end">
+                  <button onClick={() => setActiveTab('q2')} className="flex items-center text-indigo-600 hover:text-indigo-800 font-bold hover:underline">
+                    次のレベルへ進む <ArrowRight className="ml-2 w-5 h-5" />
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* --- 問2 タブ --- */}
+          {activeTab === 'q2' && (
+            <div className="animate-fade-in">
+               <h2 className="text-2xl font-bold mb-6 flex items-center">
+                <History className="w-6 h-6 mr-2 text-indigo-600" />
+                問2：年代順配列
+              </h2>
+              
+              <div className="mb-6 p-6 bg-gray-50 rounded-xl border border-gray-200">
+                <p className="font-medium text-lg mb-4 text-center">
+                  古い順に並べてみよう！タイムトラベルクイズ🕰️
+                </p>
+                
+                <div className="bg-white p-4 rounded-lg shadow-sm mb-4 space-y-3">
+                  <div className="flex items-start">
+                    <span className="font-bold text-white bg-indigo-500 w-6 h-6 rounded-full flex items-center justify-center mr-2 text-sm mt-1">Ⅰ</span>
+                    <p>後白河法皇が『梁塵秘抄』を作った（平安末期・今様ブーム）</p>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="font-bold text-white bg-indigo-500 w-6 h-6 rounded-full flex items-center justify-center mr-2 text-sm mt-1">Ⅱ</span>
+                    <p>二条良基が連歌のルールを作った（室町時代）</p>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="font-bold text-white bg-indigo-500 w-6 h-6 rounded-full flex items-center justify-center mr-2 text-sm mt-1">Ⅲ</span>
+                    <p>順徳天皇が『禁秘抄』を書いた（鎌倉初期・承久の乱の人）</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {[
+                    { id: 1, text: "Ⅰ → Ⅱ → Ⅲ" },
+                    { id: 2, text: "Ⅰ → Ⅲ → Ⅱ" },
+                    { id: 3, text: "Ⅱ → Ⅰ → Ⅲ" },
+                    { id: 4, text: "Ⅱ → Ⅲ → Ⅰ" },
+                    { id: 5, text: "Ⅲ → Ⅰ → Ⅱ" },
+                    { id: 6, text: "Ⅲ → Ⅱ → Ⅰ" }
+                  ].map((option) => (
+                    <button
+                      key={option.id}
+                      onClick={() => handleQ2Select(option.id)}
+                      className={`p-3 rounded-lg border-2 font-bold transition-all transform hover:scale-105 ${
+                         q2Selected === option.id 
+                          ? option.id === 2 
+                            ? 'bg-green-600 text-white border-green-600 shadow-lg' 
+                            : 'bg-red-500 text-white border-red-500 shadow-lg'
+                          : 'bg-white text-stone-700 hover:bg-stone-100 border-stone-200'
+                      }`}
+                    >
+                      {option.text}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {showQ2Explanation && (
+                <div className="mt-6 space-y-6 animate-fade-in-up">
+                   {q2Selected === 2 ? (
+                    <div className="p-6 bg-green-100 text-green-800 rounded-xl flex items-center justify-center border-2 border-green-200">
+                      <Sparkles className="w-8 h-8 mr-2 text-yellow-600" />
+                      <div>
+                          <span className="font-bold text-xl block">素晴らしい！正解です！（答え：②）</span>
+                          <span className="text-sm">時代の流れが完璧に見えていますね。</span>
+                      </div>
+                      <Sparkles className="w-8 h-8 ml-2 text-yellow-600" />
+                    </div>
+                  ) : (
+                    <div className="p-4 bg-red-100 text-red-800 rounded-xl flex items-center border border-red-200">
+                      <XCircle className="w-8 h-8 mr-2" />
+                      <div>
+                        <span className="font-bold text-lg">残念！不正解です...</span>
+                        <span className="text-sm block">もう一度、下の図で時代を確認しましょう。</span>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="bg-white border border-stone-200 rounded-xl p-6 shadow-lg relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-4 opacity-10">
+                        <History size={100} />
+                    </div>
+                    <h3 className="text-xl font-bold text-stone-800 mb-6 text-center">時代の流れ早わかりチャート</h3>
+                    
+                    <div className="relative pl-4">
+                      {/* タイムラインの線 */}
+                      <div className="absolute left-8 top-2 bottom-2 w-1 bg-gradient-to-b from-indigo-200 via-indigo-400 to-indigo-200 rounded"></div>
+
+                      {/* I: 平安末期 */}
+                      <div className="relative flex items-center mb-10 group">
+                        <div className="absolute left-8 w-6 h-6 bg-indigo-600 rounded-full -ml-2.5 border-4 border-white shadow-sm z-10 text-white flex items-center justify-center text-xs font-bold">1</div>
+                        <div className="ml-12 bg-indigo-50 p-4 rounded-lg w-full hover:bg-indigo-100 transition-colors cursor-default">
+                           <span className="inline-block px-2 py-1 bg-indigo-200 text-indigo-800 text-xs font-bold rounded mb-1">平安時代 末期</span>
+                           <h4 className="font-bold text-lg text-indigo-900">Ⅰ：後白河法皇</h4>
+                           <p className="text-sm text-stone-600">「遊びをせんとや〜♪」と歌（今様）が大好きだった法皇様。</p>
+                        </div>
+                      </div>
+
+                      {/* III: 鎌倉初期 */}
+                      <div className="relative flex items-center mb-10">
+                        <div className="absolute left-8 w-6 h-6 bg-indigo-600 rounded-full -ml-2.5 border-4 border-white shadow-sm z-10 text-white flex items-center justify-center text-xs font-bold">2</div>
+                         <div className="ml-12 bg-indigo-50 p-4 rounded-lg w-full hover:bg-indigo-100 transition-colors cursor-default">
+                           <span className="inline-block px-2 py-1 bg-indigo-200 text-indigo-800 text-xs font-bold rounded mb-1">鎌倉時代 初期</span>
+                           <h4 className="font-bold text-lg text-indigo-900">Ⅲ：順徳天皇</h4>
+                           <p className="text-sm text-stone-600">承久の乱で島流しに...。朝廷の儀式の本を書きました。</p>
+                        </div>
+                      </div>
+
+                       {/* II: 南北朝〜室町 */}
+                      <div className="relative flex items-center">
+                        <div className="absolute left-8 w-6 h-6 bg-indigo-600 rounded-full -ml-2.5 border-4 border-white shadow-sm z-10 text-white flex items-center justify-center text-xs font-bold">3</div>
+                         <div className="ml-12 bg-indigo-50 p-4 rounded-lg w-full hover:bg-indigo-100 transition-colors cursor-default">
+                           <span className="inline-block px-2 py-1 bg-indigo-200 text-indigo-800 text-xs font-bold rounded mb-1">室町時代</span>
+                           <h4 className="font-bold text-lg text-indigo-900">Ⅱ：二条良基</h4>
+                           <p className="text-sm text-stone-600">連歌（れんが）のプロフェッショナル。足利義満の時代です。</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* --- 神戸と貿易の歴史 タブ --- */}
+          {activeTab === 'trade' && (
+            <div className="animate-fade-in">
+              <h2 className="text-2xl font-bold mb-6 flex items-center text-amber-900">
+                <Ship className="w-8 h-8 mr-3 text-amber-600" />
+                神戸（大輪田泊）と貿易の歴史
+              </h2>
+
+              <div className="space-y-8">
+                {/* 清盛コーナー（面白要素） */}
+                <section className="bg-gradient-to-r from-amber-100 to-orange-50 rounded-2xl p-6 border-2 border-amber-200 shadow-md relative overflow-hidden">
+                    <div className="flex flex-col md:flex-row items-center gap-6 z-10 relative">
+                        <div className="flex-shrink-0 flex flex-col items-center">
+                            <div className="w-24 h-24 bg-amber-300 rounded-full flex items-center justify-center border-4 border-white shadow-lg mb-2 overflow-hidden">
+                                <img src="https://i.postimg.cc/XJJRF6Sn/IMG-1184.jpg" alt="平清盛" className="w-full h-full object-cover" />
+                            </div>
+                            <span className="font-bold text-amber-900 bg-white px-3 py-1 rounded-full shadow-sm text-sm">平 清盛</span>
+                        </div>
+                        <div className="flex-1 bg-white p-4 rounded-xl shadow-sm relative speech-bubble-left w-full">
+                            <p className="text-lg font-medium text-stone-800 mb-3">
+                                {kiyomoriQuote}
+                            </p>
+                            <button 
+                                onClick={handleKiyomoriTalk}
+                                className="text-sm bg-amber-500 text-white px-4 py-2 rounded-full hover:bg-amber-600 transition-colors font-bold flex items-center ml-auto"
+                            >
+                                <MessageCircle className="w-4 h-4 mr-1" />
+                                次の話を聞く
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                {/* なぜ神戸なのか？ */}
+                <section className="bg-white rounded-xl p-6 border border-indigo-100 shadow-sm">
+                  <h3 className="text-xl font-bold text-indigo-900 mb-4 flex items-center">
+                    <Anchor className="w-5 h-5 mr-2" />
+                    なぜ「大輪田泊（神戸）」が選ばれた？
+                  </h3>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="bg-blue-50 p-5 rounded-xl hover:bg-blue-100 transition-colors">
+                      <h4 className="font-bold text-lg mb-2 text-blue-900">🌊 1. 天然のバリア</h4>
+                      <p className="text-stone-700 text-sm leading-relaxed">
+                        六甲山地が北風をブロック！和田岬が波をブロック！<br/>
+                        当時の船にとって、これほど安全な「風待ち・潮待ち」スポットはありませんでした。
+                      </p>
+                    </div>
+                    <div className="bg-blue-50 p-5 rounded-xl hover:bg-blue-100 transition-colors">
+                      <h4 className="font-bold text-lg mb-2 text-blue-900">🚢 2. 京都への玄関口</h4>
+                      <p className="text-stone-700 text-sm leading-relaxed">
+                        都（京都）に近いのが最強のメリット。<br/>
+                        ここで荷物を降ろして、川（淀川）を使って京都へ運ぶ「物流のゴールデンルート」でした。
+                      </p>
+                    </div>
+                  </div>
+                </section>
+
+                {/* 貿易の歴史タイムライン */}
+                <section>
+                  <h3 className="text-xl font-bold text-stone-800 mb-4 flex items-center">
+                    <TrendingUp className="w-5 h-5 mr-2" />
+                    貿易の進化：レベルアップの歴史
+                  </h3>
+                  <div className="bg-white border border-stone-200 rounded-xl overflow-hidden shadow-sm">
+                    <table className="w-full text-left border-collapse">
+                      <thead className="bg-stone-100 text-stone-600 text-sm uppercase">
+                        <tr>
+                          <th className="p-4 border-b">時代・貿易名</th>
+                          <th className="p-4 border-b">プレイヤー（中心人物）</th>
+                          <th className="p-4 border-b">神戸での出来事</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-stone-800">
+                        <tr className="border-b hover:bg-amber-50 transition-colors">
+                          <td className="p-4">
+                            <span className="font-bold text-indigo-700 block text-lg">日宋貿易</span>
+                            <span className="text-xs text-stone-500">平安末期〜</span>
+                          </td>
+                          <td className="p-4 font-medium">平清盛<span className="text-xs block text-stone-500">（平氏政権）</span></td>
+                          <td className="p-4">
+                            <span className="font-bold text-red-600">大輪田泊を大改造！</span><br />
+                            「経が島」を作って、大型船が入れるようにした。
+                          </td>
+                        </tr>
+                        <tr className="border-b hover:bg-amber-50 transition-colors">
+                          <td className="p-4">
+                            <span className="font-bold text-indigo-700 block text-lg">日元貿易</span>
+                            <span className="text-xs text-stone-500">鎌倉〜南北朝</span>
+                          </td>
+                          <td className="p-4 font-medium">鎌倉幕府<br/><span className="text-xs text-stone-500">（寺社造営船など）</span></td>
+                          <td className="p-4">
+                            モンゴルと戦争（元寇）しても、商売は別！<br />
+                            民間の貿易船はバンバン行き来していました。
+                          </td>
+                        </tr>
+                        <tr className="hover:bg-amber-50 transition-colors">
+                          <td className="p-4">
+                            <span className="font-bold text-indigo-700 block text-lg">日明貿易</span>
+                            <span className="text-xs text-stone-500">室町時代</span>
+                          </td>
+                          <td className="p-4 font-medium">足利義満<br/><span className="text-xs text-stone-500">（室町幕府）</span></td>
+                          <td className="p-4">
+                            名前が<span className="font-bold">「兵庫津（ひょうごのつ）」</span>に進化。<br />
+                            堺（大阪）と並ぶ国際港として大繁栄。
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+
+                {/* 輸入されたもの */}
+                <section className="bg-amber-100 p-6 rounded-xl border-2 border-amber-300 shadow-md">
+                  <h3 className="text-lg font-bold text-amber-900 mb-3 flex items-center">
+                     💰 輸入された「宋銭」ショック！
+                  </h3>
+                  <p className="text-stone-800 mb-4 font-medium">
+                    大量の宋銭（銅銭）輸入は、当時の日本にとって「キャッシュレス決済導入」くらいの衝撃でした。
+                  </p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div className="bg-white p-3 rounded-lg text-center shadow-sm border border-amber-200">
+                        <div className="text-2xl mb-1">🪙</div>
+                        <div className="font-bold text-amber-800 text-sm">宋銭</div>
+                        <div className="text-xs text-stone-500">大量輸入！</div>
+                    </div>
+                    <div className="bg-white p-3 rounded-lg text-center shadow-sm border border-amber-200">
+                        <div className="text-2xl mb-1">🏺</div>
+                        <div className="font-bold text-amber-800 text-sm">陶磁器</div>
+                        <div className="text-xs text-stone-500">高級ブランド品</div>
+                    </div>
+                    <div className="bg-white p-3 rounded-lg text-center shadow-sm border border-amber-200">
+                        <div className="text-2xl mb-1">📚</div>
+                        <div className="font-bold text-amber-800 text-sm">書籍</div>
+                        <div className="text-xs text-stone-500">最新の知識</div>
+                    </div>
+                    <div className="bg-white p-3 rounded-lg text-center shadow-sm border border-amber-200">
+                        <div className="text-2xl mb-1">🪵</div>
+                        <div className="font-bold text-amber-800 text-sm">香木</div>
+                        <div className="text-xs text-stone-500">良い香り</div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          )}
+        </main>
+        
+        <footer className="mt-8 text-center text-stone-500 text-sm pb-8">
+          <p>© 日本史探究 学習サポート（Enjoy History!）</p>
+        </footer>
+      </div>
+      
+      <style>{`
+        .speech-bubble-left::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-right-color: white;
+            border-left: 0;
+            margin-top: -10px;
+            margin-left: -10px;
+        }
+        @media (max-width: 768px) {
+            .speech-bubble-left::after {
+                top: 0;
+                left: 50%;
+                border: 10px solid transparent;
+                border-bottom-color: white;
+                border-top: 0;
+                margin-left: -10px;
+                margin-top: -10px;
+            }
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default HistoryLearningApp;
